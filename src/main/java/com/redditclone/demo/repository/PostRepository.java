@@ -25,7 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	 * @param the input user details which needs to be found.
 	 * @return the list of post details for given user.
 	 */
-	List<Post> findByUser(User searchInputuser);
+	List<Post> findByPostedUser(User searchInputuser);
 
 	/**
 	 * findAllBySubreddit methods finds and returns the all the posts related to for
@@ -34,6 +34,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	 * @param the input subreddit details which needs to be found.
 	 * @return the list of post details related to the subreddit.
 	 */
-	List<Post> findAllBySubreddit(Subreddit searchInputSubreddit);
+	List<Post> findAllByRelatedSubredditCategory(Subreddit searchInputSubreddit);
 
 }

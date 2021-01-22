@@ -3,14 +3,14 @@ package com.redditclone.demo.model;
 import java.time.Instant;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.Id;
-
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -45,6 +45,7 @@ public class VerificationToken {
 	/**
 	 * Contains related user information for which verification token is generated.
 	 */
+	@OneToOne(fetch = FetchType.LAZY)
 	private User relatedUser;
 
 	/**

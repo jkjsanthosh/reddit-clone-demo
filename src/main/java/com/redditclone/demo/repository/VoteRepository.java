@@ -30,5 +30,5 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 	 *         found,returns vote data. if not, Optional.empty() is returned by
 	 *         default.
 	 */
-	Optional<Vote> findTopByPostAndUserOrderByVoteIdDesc(Post post, User currentUser);
+	Optional<Vote> findTopByVotedPostAndVotedUserOrderByVoteIdDesc(Post post, User currentUser);
 }

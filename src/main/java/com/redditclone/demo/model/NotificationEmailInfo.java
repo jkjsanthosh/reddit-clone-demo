@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
  * @author Santhosh Kumar J
  *
  */
-public class EmailNotificationInfo {
+public class NotificationEmailInfo {
 
 	/**
 	 * the subject of the email notification.

@@ -1,14 +1,13 @@
 package com.redditclone.demo.repository;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.redditclone.demo.model.Comment;
 import com.redditclone.demo.model.Post;
 import com.redditclone.demo.model.User;
-
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 /**
@@ -27,7 +26,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	 * @param the input post details which needs to be found.
 	 * @return the list of comments details for matching post.
 	 */
-	List<Comment> findByPost(Post searchInputpost);
+	List<Comment> findByCommentedPost(Post searchInputpost);
 
 	/**
 	 * findAllByUser methods finds and returns the all the posts for given user.
@@ -35,5 +34,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	 * @param the input user details which needs to be found.
 	 * @return the list of comments details related to the user.
 	 */
-	List<Comment> findAllByUser(User searchInputuser);
+	List<Comment> findAllByCommentedUser(User searchInputuser);
 }

@@ -2,7 +2,6 @@ package com.redditclone.demo.model;
 
 import java.time.Instant;
 
-import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;

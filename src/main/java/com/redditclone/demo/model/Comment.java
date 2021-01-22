@@ -1,7 +1,6 @@
 package com.redditclone.demo.model;
 
 import java.time.Instant;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
