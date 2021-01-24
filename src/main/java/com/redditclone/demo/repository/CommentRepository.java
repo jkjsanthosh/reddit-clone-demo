@@ -26,7 +26,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	 * @param the input post details which needs to be found.
 	 * @return the list of comments details for matching post.
 	 */
-	List<Comment> findByCommentedPost(Post searchInputpost);
+	List<Comment> findByPost(Post searchInputpost);
 
 	/**
 	 * findAllByUser methods finds and returns the all the posts for given user.
@@ -34,5 +34,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	 * @param the input user details which needs to be found.
 	 * @return the list of comments details related to the user.
 	 */
-	List<Comment> findAllByCommentedUser(User searchInputuser);
+	List<Comment> findAllByUser(User searchInputuser);
 }

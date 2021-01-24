@@ -7,11 +7,10 @@ import org.thymeleaf.context.Context;
 import lombok.AllArgsConstructor;
 
 /**
- * The Class MailContentBuilderService.
+ * MailContentBuilderService class provides method to build mail content.
  */
 @Service
 @AllArgsConstructor
-//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MailContentBuilderService {
 
 	/**

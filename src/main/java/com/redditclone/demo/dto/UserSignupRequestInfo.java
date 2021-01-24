@@ -23,7 +23,7 @@ public class UserSignupRequestInfo {
 	/**
 	 * the new user name of account of the user.
 	 */
-	private String userName;
+	private String username;
 
 	/**
 	 * the password of the user.

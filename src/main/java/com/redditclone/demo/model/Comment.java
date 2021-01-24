@@ -9,12 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -53,7 +52,7 @@ public class Comment {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId", referencedColumnName = "postId")
-	private Post commentedPost;
+	private Post post;
 
 	/**
 	 * contains user commented date time information in UTC Time Zone/Format.
@@ -65,5 +64,5 @@ public class Comment {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", referencedColumnName = "userId")
-	private User commentedUser;
+	private User user;
 }

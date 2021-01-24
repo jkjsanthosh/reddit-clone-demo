@@ -46,13 +46,13 @@ public class Vote {
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId", referencedColumnName = "postId")
-	private Post votedPost;
+	private Post post;
 
 	/**
 	 * the user information who voted for the post.
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", referencedColumnName = "userId")
-	private User votedUser;
+	private User user;
 
 }

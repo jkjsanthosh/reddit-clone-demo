@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.redditclone.demo.model.RefreshToken;
 import com.redditclone.demo.model.VerificationToken;
 
 @Repository
@@ -27,5 +26,5 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
 	 *         token data if matching refresh token is found, if not,
 	 *         Optional.empty() is returned by default.
 	 */
-	Optional<RefreshToken> findByToken(String searchInputToken);
+	Optional<VerificationToken> findByToken(String searchInputToken);
 }

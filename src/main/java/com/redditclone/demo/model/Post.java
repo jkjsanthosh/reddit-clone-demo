@@ -76,7 +76,7 @@ public class Post {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", referencedColumnName = "userId")
-	private User postedUser;
+	private User user;
 
 	/**
 	 * contains post created date time information in UTC Time Zone/Format.

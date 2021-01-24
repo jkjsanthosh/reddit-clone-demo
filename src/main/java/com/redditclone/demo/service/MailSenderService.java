@@ -4,6 +4,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.redditclone.demo.exceptions.SpringRedditException;
@@ -19,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @AllArgsConstructor
-//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MailSenderService {
 
 	/** The java mail sender service which is used to send mail. */
@@ -34,6 +34,7 @@ public class MailSenderService {
 	 *
 	 * @param notificationEmailInfo the email notification info
 	 */
+	@Async
 	public void sendMailNotification(NotificationEmailInfo notificationEmailInfo) {
 		MimeMessagePreparator mimeMessagePreparator = mimeMessage -> {
 			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);

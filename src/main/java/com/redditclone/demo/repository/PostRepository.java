@@ -25,7 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	 * @param the input user details which needs to be found.
 	 * @return the list of post details for given user.
 	 */
-	List<Post> findByPostedUser(User searchInputuser);
+	List<Post> findByUser(User searchInputuser);
 
 	/**
 	 * findAllBySubreddit methods finds and returns the all the posts related to for
