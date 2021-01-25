@@ -40,8 +40,8 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 
 	/**
-	 * The user repository which is used to save new signup user details into user
-	 * table in the database.
+	 * The user repository which is used to perform CRUD operations on data from the
+	 * user table in the database.
 	 */
 	private final UserRepository userRepository;
 

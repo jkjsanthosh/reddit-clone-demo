@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
  * Subreddit is entity class which contains information about
  * community/subreddit which will be used for categorizing or organizing the
  * posts. It contains information such as name,description,list of post
- * associated with it and created date time info.,
+ * associated with it and created date time info.
  * 
  * @author Santhosh Kumar J
  *
@@ -76,4 +76,5 @@ public class Subreddit {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
+
 }

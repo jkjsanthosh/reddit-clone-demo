@@ -11,14 +11,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.redditclone.demo.security.JwtAuthenticationFilter;
 
 import lombok.AllArgsConstructor;
 
 /**
  * HttpWebSecurityConfig class defines and configures http web security for
- * reddit back end api requests. It configures authentication for each and every
- * api request in order to ensure security authentication of user and data.
- * since session is not used csrf check is disabled.
+ * reddit back end api requests.
  * 
  * @author Santhosh Kumar J
  *
@@ -27,23 +28,62 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class HttpWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	/**
+	 * The user details service which is used by authentication builder manager to
+	 * build authentication object.
+	 */
 	private final UserDetailsService userDetailsService;
+
+	/**
+	 * The jwt authentication filter which is used to authenticate and filter every
+	 * incoming api request based on jwt.
+	 */
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+	/**
+	 * configure method configures http security authentication for each and every
+	 * api request in order to ensure security of user and data. since session is
+	 * not used csrf check is disable and also it adds jwt authentication filter to
+	 * authenticate every api request to verify active user login.
+	 */
 	@Override
 	public void configure(HttpSecurity httpSecurityConfig) throws Exception {
-		httpSecurityConfig.csrf().disable().authorizeRequests().antMatchers("/api/auth/**").permitAll().anyRequest()
-				.authenticated();
+		httpSecurityConfig.csrf().disable().authorizeRequests().antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/api/subreddit/**").permitAll().anyRequest().authenticated();
+		httpSecurityConfig.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
+	/**
+	 * passwordEncoder bean which will be used to encode password.
+	 * 
+	 * @return BCryptPasswordEncoder
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
+	/**
+	 * configureAuthenticationManagerBuilder method configures user details service
+	 * instance to the authentication manager builder.
+	 *
+	 * @param authenticationManagerBuilder the authentication manager builder.
+	 * @throws Exception the exception
+	 */
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+	public void configureAuthenticationManagerBuilder(AuthenticationManagerBuilder authenticationManagerBuilder)
+			throws Exception {
 		authenticationManagerBuilder.userDetailsService(userDetailsService);
 	}
 
+	/**
+	 * authenticationManagerBean which is used to authenticate user login details
+	 * and returns authentication information.
+	 *
+	 * @return authenticationManagerBean the authentication manager which will be
+	 *         used for authentication.
+	 * @throws Exception the exception
+	 */
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {

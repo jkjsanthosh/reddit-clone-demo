@@ -18,12 +18,12 @@ import lombok.AllArgsConstructor;
 
 /**
  * AuthController class provides api request methods to handle all kind of
- * authentication such as registration,login and verification of user accounts.
+ * authentication such as signup,login and verification of user accounts.
  *
  * @author Santhosh Kumar J
  */
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth")
 @AllArgsConstructor
 public class AuthController {
 	private final AuthService authService;
