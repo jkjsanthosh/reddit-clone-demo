@@ -34,6 +34,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	 * @param the input subreddit details which needs to be found.
 	 * @return the list of post details related to the subreddit.
 	 */
-	List<Post> findAllByRelatedSubredditCategory(Subreddit searchInputSubreddit);
+	List<Post> findAllByRelatedSubreddit(Subreddit searchInputSubreddit);
 
 }

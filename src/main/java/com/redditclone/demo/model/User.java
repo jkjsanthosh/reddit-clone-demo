@@ -43,7 +43,7 @@ public class User {
 	 * value is null or empty/blank.
 	 */
 	@NotBlank(message = "Username is required")
-	private String userName;
+	private String username;
 
 	/**
 	 * contains password of the user which is used authenticate user.

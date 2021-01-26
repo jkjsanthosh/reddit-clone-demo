@@ -26,6 +26,11 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 public class AuthController {
+
+	/**
+	 * The auth service which will be used to signup,verify and login authentication
+	 * user accounts.
+	 */
 	private final AuthService authService;
 
 	/**

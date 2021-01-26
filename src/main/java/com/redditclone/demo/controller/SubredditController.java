@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,8 @@ import lombok.AllArgsConstructor;
 
 /**
  * SubredditController class provides api request methods to handle all kind of
- * operations such as creation and fetch subreddits.
- * 
+ * operations such as creation of subreddit and fetching the subreddits
+ * information based on different input attributes which is linked to subreddit.
  */
 @RestController
 @RequestMapping("/api/subreddit")
@@ -26,18 +27,18 @@ import lombok.AllArgsConstructor;
 public class SubredditController {
 
 	/**
-	 * The subreddit service which is used to perform all kind of operations on
+	 * The subreddit service which will be used to perform all kind of operations on
 	 * subreddits.
 	 */
 	private final SubredditService subredditService;
 
 	/**
-	 * createSubreddit method handles creation of new subreddit and returns the
-	 * created subreddit.
+	 * createSubreddit method handles api request for creation of new subreddit and
+	 * returns the created subreddit.
 	 *
 	 * @param SubredditDto the subreddit dto which contains information to create
 	 *                     new subreddit.
-	 * @return esponseEntity<SubredditDto> the response entity which contains the
+	 * @return ResponseEntity<SubredditDto> the response entity which contains the
 	 *         created subreddit as response.
 	 */
 	@PostMapping("createSubreddit")
@@ -46,12 +47,29 @@ public class SubredditController {
 	}
 
 	/**
-	 * getAllSubreddits method fetches and return all the subreddits.
+	 * getSubreddit method handles the api request to find the matching subreddit
+	 * information by id and returns it .
 	 *
-	 * @return <List<SubredditDto>> the list of all subreddits
+	 * @param id the id which related subreddit needs to be found.
+	 * @return ResponseEntity<SubredditDto> the response entity which contains the
+	 *         matching subreddit information as response.
+	 */
+	@GetMapping("getSubreddit/{id}")
+	public ResponseEntity<SubredditDto> getSubreddit(@PathVariable Long id) {
+		return ResponseEntity.status(HttpStatus.OK).body(subredditService.getSubreddit(id));
+	}
+
+	/**
+	 * getAllSubreddits method handles the api request to get and return all the
+	 * subreddits.
+	 *
+	 * @return ResponseEntity<List<SubredditDto>> the response entity which contains
+	 *         the list of all subreddit information as response.
 	 */
 	@GetMapping("getAllSubreddits")
 	public ResponseEntity<List<SubredditDto>> getAllSubreddits() {
 		return ResponseEntity.status(HttpStatus.CREATED).body(subredditService.getAllSubreddits());
 	}
+
+
 }

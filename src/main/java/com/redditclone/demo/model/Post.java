@@ -79,14 +79,15 @@ public class Post {
 	private User user;
 
 	/**
+	 * related subreddit under which reddit post is created.
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "subredditId", referencedColumnName = "id")
+	private Subreddit relatedSubreddit;
+
+	/**
 	 * contains post created date time information in UTC Time Zone/Format.
 	 */
 	private Instant createdDateTime;
 
-	/**
-	 * related subreddit category under which reddit post is created.
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "subredditId", referencedColumnName = "id")
-	private Subreddit relatedSubredditCategory;
 }

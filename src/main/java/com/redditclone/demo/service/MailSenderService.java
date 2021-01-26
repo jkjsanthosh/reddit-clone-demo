@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.redditclone.demo.exceptions.SpringRedditException;
+import com.redditclone.demo.exceptions.RedditException;
 import com.redditclone.demo.model.NotificationEmailInfo;
 
 import lombok.AllArgsConstructor;
@@ -55,7 +55,7 @@ public class MailSenderService {
 		} catch (MailException mailException) {
 			log.error("Verification and Account Activation Email Sent failed!"
 					+ "\n Please refer below stack trace log for more details" + mailException.getMessage());
-			throw new SpringRedditException(
+			throw new RedditException(
 					"Exception occurred when sending mail to " + notificationEmailInfo.getRecipientEmailAddress(),
 					mailException);
 		}

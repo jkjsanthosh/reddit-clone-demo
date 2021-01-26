@@ -22,15 +22,21 @@ import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 
 /**
- * The Class JwtAuthenticationFilter.
+ * JwtAuthenticationFilter is http authentication filter class which
+ * authenticate and filters each and every http request api request with valid
+ * jwt.
  */
 @Component
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	/** The jwt provider. */
+	/** The jwt provider which is used to validate jwt. */
 	private JwtProvider jwtProvider;
 
+	/**
+	 * The user details service which is used to fetch user details and prepare
+	 * authentication information.
+	 */
 	private final UserDetailsService userDetailsService;
 
 	@Override

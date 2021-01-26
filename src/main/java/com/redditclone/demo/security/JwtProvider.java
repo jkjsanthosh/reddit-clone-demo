@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.redditclone.demo.exceptions.SpringRedditException;
+import com.redditclone.demo.exceptions.RedditException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -50,7 +50,7 @@ public class JwtProvider {
 			InputStream resourceAsStream = getClass().getResourceAsStream("/reddit-secret-key-store.jks");
 			keyStore.load(resourceAsStream, "reddit@secret$key%store".toCharArray());
 		} catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException exception) {
-			throw new SpringRedditException("Exception occured while loading keystore", exception);
+			throw new RedditException("Exception occured while loading keystore", exception);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class JwtProvider {
 		try {
 			return (PrivateKey) keyStore.getKey("reddit-secret-key", "reddit%secret$key".toCharArray());
 		} catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException exception) {
-			throw new SpringRedditException("Exception occured while retrieving private key from keystore", exception);
+			throw new RedditException("Exception occured while retrieving private key from keystore", exception);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class JwtProvider {
 		try {
 			return keyStore.getCertificate("reddit-secret-key").getPublicKey();
 		} catch (KeyStoreException exception) {
-			throw new SpringRedditException("Exception occured while retrieving public key from keystore", exception);
+			throw new RedditException("Exception occured while retrieving public key from keystore", exception);
 		}
 	}
 }

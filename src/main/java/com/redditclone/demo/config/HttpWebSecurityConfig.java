@@ -49,8 +49,9 @@ public class HttpWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity httpSecurityConfig) throws Exception {
 		httpSecurityConfig.csrf().disable().authorizeRequests().antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/api/subreddit/**").permitAll().anyRequest().authenticated();
-		httpSecurityConfig.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+				.antMatchers("/api/subreddit/**").permitAll().antMatchers("/api/posts/**").permitAll()
+				.anyRequest().authenticated();
+		httpSecurityConfig.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	/**

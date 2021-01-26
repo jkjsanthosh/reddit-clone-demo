@@ -8,13 +8,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.redditclone.demo.dto.AuthenticationResponse;
 import com.redditclone.demo.dto.UserSignupRequestInfo;
-import com.redditclone.demo.exceptions.SpringRedditException;
+import com.redditclone.demo.exceptions.RedditException;
 import com.redditclone.demo.model.NotificationEmailInfo;
 import com.redditclone.demo.model.User;
 import com.redditclone.demo.model.VerificationToken;
@@ -89,7 +90,7 @@ public class AuthService {
 	 */
 	private User prepareAndSaveNewUserRegistrationInfo(UserSignupRequestInfo userSignupRequestInfo) {
 		User newUserInfo = new User();
-		newUserInfo.setUserName(userSignupRequestInfo.getUsername());
+		newUserInfo.setUsername(userSignupRequestInfo.getUsername());
 		newUserInfo.setEmail(userSignupRequestInfo.getEmail());
 		newUserInfo.setPassword(passwordEncoder.encode(userSignupRequestInfo.getPassword()));
 		newUserInfo.setCreatedDateTime(Instant.now());
@@ -144,9 +145,9 @@ public class AuthService {
 	public void verifyNewUserAccount(String verificationToken) {
 		Optional<VerificationToken> verificationTokenInfo = verificationTokenRepository.findByToken(verificationToken);
 		if (verificationTokenInfo.isPresent()) {
-			fetchAndEnableUserAccount(verificationTokenInfo.get().getRelatedUser().getUserName());
+			fetchAndEnableUserAccount(verificationTokenInfo.get().getRelatedUser().getUsername());
 		} else {
-			throw new SpringRedditException("Invalid Verification Token");
+			throw new RedditException("Invalid Verification Token");
 		}
 	}
 
@@ -158,12 +159,12 @@ public class AuthService {
 	 */
 	@Transactional
 	private void fetchAndEnableUserAccount(String username) {
-		Optional<User> relatedUserInfoOptional = userRepository.findByUserName(username);
+		Optional<User> relatedUserInfoOptional = userRepository.findByUsername(username);
 		if (relatedUserInfoOptional.isPresent()) {
 			User relatedUserInfo = relatedUserInfoOptional.get();
 			userRepository.updateUserAccountStatusByUserId(relatedUserInfo.getUserId(), true);
 		} else {
-			throw new SpringRedditException("User account details not found with the name:  " + username);
+			throw new RedditException("User account details not found with the name:  " + username);
 		}
 	}
 
@@ -182,5 +183,22 @@ public class AuthService {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String authenticationToken = jwtProvider.generateToken(authentication);
 		return new AuthenticationResponse(username, authenticationToken);
+	}
+
+	/**
+	 * getCurrentLoggedInUser method get the currently logged in user details from
+	 * the security context and the user table. throws UsernameNotFoundException if
+	 * related user information is not found.
+	 *
+	 * @return the current user who is logged in.
+	 * 
+	 * @throws UsernameNotFoundException if related user information is not found.
+	 */
+	@Transactional(readOnly = true)
+	public User getCurrentLoggedInUser() {
+		org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		return userRepository.findByUsername(principal.getUsername())
+				.orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
 	}
 }
