@@ -33,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * updateUserAccountStatusByUserId method updates user account enabled status to
 	 * given status by user id.
 	 *
-	 * @param userId        the user id needs to be updated.
+	 * @param userId        the user id of the user which needs to be updated.
 	 * @param isUserEnabled the is user enabled status.
 	 * @return the int the update status.
 	 */

@@ -13,7 +13,7 @@ public class PostNotFoundException extends RuntimeException {
 		super(exMessage, exception);
 	}
 
-	public PostNotFoundException(String exMessage) {
-		super(exMessage);
+	public PostNotFoundException(String postIdOrName) {
+		super("Post Not Found with Id or Name: " + postIdOrName);
 	}
 }

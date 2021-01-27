@@ -69,7 +69,8 @@ public class Post {
 	/**
 	 * no of votes for this post.
 	 */
-	private Integer voteCount;
+	@Builder.Default
+	private Integer voteCount = 0;
 
 	/**
 	 * Contains post author's user information.

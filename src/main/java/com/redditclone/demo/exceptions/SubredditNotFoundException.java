@@ -13,8 +13,8 @@ public class SubredditNotFoundException extends RuntimeException {
 		super(exMessage, exception);
 	}
 
-	public SubredditNotFoundException(String exMessage) {
-		super(exMessage);
+	public SubredditNotFoundException(String subredditIdOrName) {
+		super("Subreddit Not Found with Id or Name: " + subredditIdOrName);
 	}
 
 }

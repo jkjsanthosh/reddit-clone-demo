@@ -20,6 +20,11 @@ import com.redditclone.demo.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * PostService which provides service methods to perform all kind of operations
+ * on posts such as creation of post and fetching the post information based on
+ * different input attributes which is linked to post.
+ */
 @Service
 @AllArgsConstructor
 public class PostService {

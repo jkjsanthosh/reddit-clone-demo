@@ -20,6 +20,11 @@ import com.redditclone.demo.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * CommentsService which provides service methods to perform all kind of
+ * operations on comments such as creation of comment and fetching the comments
+ * information based on different input attributes which is linked to comment.
+ */
 @Service
 @AllArgsConstructor
 public class CommentsService {
@@ -57,7 +62,8 @@ public class CommentsService {
 	/**
 	 * createAndSaveNewComment method create and save new comment information into
 	 * comment table in the database.It returns the the created comment info if
-	 * creation is successful. <br>
+	 * creation is successful. Also it notifies the author of the commented post via
+	 * email. <br>
 	 * 
 	 * For creation of comment it finds and use related post information by it's
 	 * name. Also it uses logged in user details as input.<br>
@@ -104,10 +110,17 @@ public class CommentsService {
 	public List<CommentDto> getCommentsByUsername(String username) {
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User name not found - " + username));
-		return commentRepository.findAllByUser(user).stream()
-				.map(commentMapper::mapCommentDtoFromModel).collect(Collectors.toList());
+		return commentRepository.findAllByUser(user).stream().map(commentMapper::mapCommentDtoFromModel)
+				.collect(Collectors.toList());
 	}
 
+	/**
+	 * sendCommentNotification method builds content and send comment notification
+	 * to the author of the commented post via email.
+	 *
+	 * @param relatedPost      the related post
+	 * @param notificationUser the notification user
+	 */
 	private void sendCommentNotification(Post relatedPost, User notificationUser) {
 		String notificationMessage = relatedPost.getUser().getUsername() + " commented on your post "
 				+ relatedPost.getPostName();

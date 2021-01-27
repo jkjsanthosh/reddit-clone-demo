@@ -33,4 +33,13 @@ public class PostDto {
 	/** The username who have created [author] this post. */
 	private String username;
 
+	/** The vote count number of votes made on this post. */
+	private Integer voteCount;
+
+	/** The comment count number of comments made on this post. */
+	private Integer commentCount;
+
+	/** The duration of post how much has been passed after post is created. */
+	private String duration;
+
 }

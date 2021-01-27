@@ -26,7 +26,7 @@ public interface SubredditMapper {
 	 * @param subreddit the subreddit model which needs to be mapped to dto.
 	 * @return the subreddit dto which is mapped from model.
 	 */
-	@Mapping(target = "noOfRelatedPosts", expression = "java(mapnoOfRelatedPosts(subreddit.getRelatedPosts()))")
+	@Mapping(target = "noOfRelatedPosts", expression = "java(getNoOfRelatedPosts(subreddit.getRelatedPosts()))")
 	public SubredditDto mapSubredditDtoFromModel(Subreddit subreddit);
 
 	/**
@@ -45,13 +45,13 @@ public interface SubredditMapper {
 	public Subreddit mapSubredditModelFromDto(SubredditDto subredditDto);
 
 	/**
-	 * mapnoOfRelatedPosts method maps the no of related posts from the size of
+	 * getNoOfRelatedPosts method returns the no of related posts from the size of
 	 * related post list.
 	 *
 	 * @param relatedPosts the related posts under subreddit/community.
 	 * @return the integer the no of related posts.
 	 */
-	default Integer mapnoOfRelatedPosts(List<Post> relatedPosts) {
+	default Integer getNoOfRelatedPosts(List<Post> relatedPosts) {
 		return relatedPosts.size();
 	}
 }

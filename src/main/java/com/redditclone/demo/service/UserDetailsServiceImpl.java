@@ -17,6 +17,11 @@ import com.redditclone.demo.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * UserDetailsServiceImpl which implements logic to fetch user details by
+ * implementing overridden loadUserByUsername method of UserDetailsService class
+ * which will be used for authentication of user.
+ */
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {

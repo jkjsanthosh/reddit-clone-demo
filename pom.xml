@@ -99,6 +99,22 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
 		</dependency>
+		<!-- For Displaying time as Relative Time Ago ("Posted 1 Day ago"), as 
+			this is a Kotlin library, we also need Kotlin runtime libraries -->
+		<dependency>
+			<groupId>com.github.marlonlom</groupId>
+			<artifactId>timeago</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-stdlib-jdk8</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-test-junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -115,6 +131,8 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!-- maven compiler plugin for mapstruct annotation processing during 
+				compilation -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -135,6 +153,27 @@
 						<!--other annotation processors -->
 					</annotationProcessorPaths>
 				</configuration>
+			</plugin>
+			<!-- kotlin maven compiler plugin for marlonlom annotation processing during 
+				compilation for calculating relative time -->
+			<plugin>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<sourceDirs>
+								<source>src/main/java</source>
+								<source>target/generated-sources/annotations</source>
+							</sourceDirs>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

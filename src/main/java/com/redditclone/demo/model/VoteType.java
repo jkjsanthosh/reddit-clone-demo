@@ -1,5 +1,7 @@
 package com.redditclone.demo.model;
 
+import java.util.Arrays;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,17 +17,23 @@ public enum VoteType {
 	/**
 	 * Vote Value incremented by 1. Upwards the reddit post value.
 	 */
-	UPVOTE(voteValue = 1),
+	UPVOTE(1),
 	/**
 	 * Vote Value decremented by 1. Downwards the reddit post value.
 	 */
-	DOWNVOTE(voteValue = -1);
-
-	VoteType(int voteValue) {
-	}
+	DOWNVOTE(-1);
 
 	/**
 	 * indicates the value associated with each vote type.
 	 */
-	private static int voteValue;
+	@Getter
+	private int voteValue;
+
+	public static VoteType findVoteType(Integer voteValue) {
+		return Arrays.stream(VoteType.values())
+				.filter(voteType -> Integer.valueOf(voteType.getVoteValue()).equals(voteValue)).findAny()
+				.orElseThrow(() -> new IllegalArgumentException(
+						"Vote Type matching given vote value " + voteValue + "is not found"));
+		
+	}
 }

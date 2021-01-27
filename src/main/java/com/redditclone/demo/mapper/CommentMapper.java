@@ -9,6 +9,11 @@ import com.redditclone.demo.model.Comment;
 import com.redditclone.demo.model.Post;
 import com.redditclone.demo.model.User;
 
+/**
+ * CommentMapper interface defines the mapper methods to map between to comment
+ * model and comment dto which will be used map struct to generate
+ * implementation by annotation processing .
+ */
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 

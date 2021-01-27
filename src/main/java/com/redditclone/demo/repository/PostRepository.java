@@ -3,7 +3,10 @@ package com.redditclone.demo.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.redditclone.demo.model.Post;
 import com.redditclone.demo.model.Subreddit;
@@ -35,5 +38,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	 * @return the list of post details related to the subreddit.
 	 */
 	List<Post> findAllByRelatedSubreddit(Subreddit searchInputSubreddit);
+
+	/**
+	 * updateVoteCount method updates vote count to given updated vote count.
+	 *
+	 * @param postId           the post id of post which needs to be updated.
+	 * @param updatedVoteCount the updated vote count which needs to be updated.
+	 * @return the int the update status.
+	 */
+	@Modifying
+	@Transactional
+	@Query("update Post set vote_count = :updatedVoteCount where post_id = :postId")
+	int updateVoteCount(Long postId, Integer updatedVoteCount);
 
 }
