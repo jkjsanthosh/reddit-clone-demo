@@ -18,8 +18,8 @@ import lombok.AllArgsConstructor;
 
 /**
  * PostController class provides api request methods to handle all kind of
- * operations such as creation of post and fetching the post information based
- * on different input attributes which is linked to post.
+ * operations on posts such as creation of post and fetching the post
+ * information based on different input attributes which is linked to post.
  */
 @RestController
 @RequestMapping("/api/posts/")
@@ -41,7 +41,7 @@ public class PostController {
 	 * @return ResponseEntity<PostDto> the response entity which contains the
 	 *         created post as response.
 	 */
-	@PostMapping("createPost")
+	@PostMapping("create")
 	public ResponseEntity<PostDto> createPost(@RequestBody PostDto newPostCreationRequest) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(postService.createAndSaveNewPost(newPostCreationRequest));
 	}
@@ -54,7 +54,7 @@ public class PostController {
 	 * @return ResponseEntity<PostDto> the response entity which contains the
 	 *         matching post information as response.
 	 */
-	@GetMapping("/getPost/{id}")
+	@GetMapping("/get/{id}")
 	public ResponseEntity<PostDto> getPost(@PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK).body(postService.getPost(id));
 	}
@@ -65,7 +65,7 @@ public class PostController {
 	 * @return ResponseEntity<List<PostDto>> the response entity which contains the
 	 *         list of all post information as response.
 	 */
-	@GetMapping("/getAllPosts")
+	@GetMapping("/getAll")
 	public ResponseEntity<List<PostDto>> getAllPosts() {
 		return ResponseEntity.status(HttpStatus.OK).body(postService.getAllPosts());
 	}
@@ -78,9 +78,9 @@ public class PostController {
 	 * @return ResponseEntity<List<PostDto>> the response entity which contains the
 	 *         matching list of post information as response.
 	 */
-	@GetMapping("/getPostsBySubreddit/{id}")
+	@GetMapping("/by-subreddit/{id}")
 	public ResponseEntity<List<PostDto>> getPostsBySubreddit(@PathVariable Long id) {
-		return ResponseEntity.status(HttpStatus.OK).body(postService.getPostsBySubreddit(id));
+		return ResponseEntity.status(HttpStatus.OK).body(postService.getPostsBySubredditId(id));
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class PostController {
 	 * @return ResponseEntity<List<PostDto>> the response entity which contains the
 	 *         matching list of post information as response.
 	 */
-	@GetMapping("/getPostsByUserName/{username}")
+	@GetMapping("/by-username/{username}")
 	public ResponseEntity<List<PostDto>> getPostsByUserName(@PathVariable String username) {
 		return ResponseEntity.status(HttpStatus.OK).body(postService.getPostsByUserName(username));
 	}

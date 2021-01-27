@@ -18,8 +18,9 @@ import lombok.AllArgsConstructor;
 
 /**
  * SubredditController class provides api request methods to handle all kind of
- * operations such as creation of subreddit and fetching the subreddits
- * information based on different input attributes which is linked to subreddit.
+ * operations on subreddits such as creation of subreddit and fetching the
+ * subreddits information based on different input attributes which is linked to
+ * subreddit.
  */
 @RestController
 @RequestMapping("/api/subreddit")
@@ -41,7 +42,7 @@ public class SubredditController {
 	 * @return ResponseEntity<SubredditDto> the response entity which contains the
 	 *         created subreddit as response.
 	 */
-	@PostMapping("createSubreddit")
+	@PostMapping("create")
 	public ResponseEntity<SubredditDto> createSubreddit(@RequestBody SubredditDto SubredditDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(subredditService.createandSaveSubreddit(SubredditDto));
 	}
@@ -54,7 +55,7 @@ public class SubredditController {
 	 * @return ResponseEntity<SubredditDto> the response entity which contains the
 	 *         matching subreddit information as response.
 	 */
-	@GetMapping("getSubreddit/{id}")
+	@GetMapping("get/{id}")
 	public ResponseEntity<SubredditDto> getSubreddit(@PathVariable Long id) {
 		return ResponseEntity.status(HttpStatus.OK).body(subredditService.getSubreddit(id));
 	}
@@ -66,7 +67,7 @@ public class SubredditController {
 	 * @return ResponseEntity<List<SubredditDto>> the response entity which contains
 	 *         the list of all subreddit information as response.
 	 */
-	@GetMapping("getAllSubreddits")
+	@GetMapping("getAll")
 	public ResponseEntity<List<SubredditDto>> getAllSubreddits() {
 		return ResponseEntity.status(HttpStatus.CREATED).body(subredditService.getAllSubreddits());
 	}

@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
  * @author Santhosh Kumar J
  * 
  *
- */ 
+ */
 public class Comment {
 
 	/**
@@ -41,9 +41,7 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/**
-	 * 
-	 */
+	/** The commented text which contains content of the comment. */
 	@NotEmpty
 	private String commentedText;
 
@@ -55,14 +53,14 @@ public class Comment {
 	private Post post;
 
 	/**
-	 * contains user commented date time information in UTC Time Zone/Format.
-	 */
-	private Instant commentedDateTime;
-
-	/**
 	 * the user information who commented on the post.
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", referencedColumnName = "userId")
 	private User user;
+
+	/**
+	 * contains user commented date time information in UTC Time Zone/Format.
+	 */
+	private Instant commentedDateTime;
 }

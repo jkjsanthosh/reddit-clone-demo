@@ -20,13 +20,13 @@ import com.redditclone.demo.model.User;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	/**
-	 * findByPost method finds and returns the list of comments has been made for
+	 * findAllByPost method finds and returns the list of comments has been made for
 	 * given post.
 	 * 
 	 * @param the input post details which needs to be found.
 	 * @return the list of comments details for matching post.
 	 */
-	List<Comment> findByPost(Post searchInputpost);
+	List<Comment> findAllByPost(Post searchInputpost);
 
 	/**
 	 * findAllByUser methods finds and returns the all the posts for given user.

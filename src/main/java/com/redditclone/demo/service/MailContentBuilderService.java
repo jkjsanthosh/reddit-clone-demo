@@ -23,13 +23,13 @@ public class MailContentBuilderService {
 	 * buildHtmlTemp late method builds the html template using template engine from
 	 * the verification email message and returns it as plain html text.
 	 *
-	 * @param verificationEmailMessage the verification email message which needs to
+	 * @param notificationEmailMessage the verification email message which needs to
 	 *                                 be processed as html template engine.
 	 * @return the string
 	 */
-	String buildHtmlMailTemplateText(String verificationEmailMessage) {
+	String buildHtmlMailTemplateText(String notificationEmailMessage) {
 		Context verificationEmailContext = new Context();
-		verificationEmailContext.setVariable("verificationEmailMessage", verificationEmailMessage);
+		verificationEmailContext.setVariable("verificationEmailMessage", notificationEmailMessage);
 		return templateEngine.process("user-email-verification-template", verificationEmailContext);
 
 	}

@@ -3,6 +3,7 @@ package com.redditclone.demo.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,8 +13,10 @@ import com.redditclone.demo.exceptions.SubredditNotFoundException;
 import com.redditclone.demo.mapper.PostMapper;
 import com.redditclone.demo.model.Post;
 import com.redditclone.demo.model.Subreddit;
+import com.redditclone.demo.model.User;
 import com.redditclone.demo.repository.PostRepository;
 import com.redditclone.demo.repository.SubredditRepository;
+import com.redditclone.demo.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -38,6 +41,13 @@ public class PostService {
 	 * the subreddit table in the database for which post is related to.
 	 */
 	private final SubredditRepository subredditRepository;
+
+	/**
+	 * The user repository which is used to find the user information from the user
+	 * table in the database by username.
+	 */
+	private final UserRepository userRepository;
+
 
 	/**
 	 * createAndSaveNewPost method create and save new post information into post
@@ -88,7 +98,7 @@ public class PostService {
 	}
 
 	/**
-	 * getPostsBySubreddit method gets the matching posts information by related
+	 * getPostsBySubredditId method gets the matching posts information by related
 	 * subreddit id and returns it .
 	 *
 	 * throws SubredditNotFoundException if related subreddit information is not
@@ -98,7 +108,7 @@ public class PostService {
 	 * @return List<PostDto> the list of matching post dto's.
 	 */
 	@Transactional(readOnly = true)
-	public List<PostDto> getPostsBySubreddit(Long subredditId) {
+	public List<PostDto> getPostsBySubredditId(Long subredditId) {
 		Subreddit relatedSubreddit = subredditRepository.findById(subredditId)
 				.orElseThrow(() -> new SubredditNotFoundException(subredditId.toString()));
 		return postRepository.findAllByRelatedSubreddit(relatedSubreddit).stream().map(postMapper::mapPostDtoFromModel)
@@ -113,8 +123,10 @@ public class PostService {
 	 * @return List<PostDto> the list of matching post dto's.
 	 */
 	@Transactional(readOnly = true)
-	public List<PostDto> getPostsByUserName(String userName) {
-		return postRepository.findByUser(authService.getCurrentLoggedInUser()).stream()
+	public List<PostDto> getPostsByUserName(String username) {
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User name not found - " + username));
+		return postRepository.findAllByUser(user).stream()
 				.map(postMapper::mapPostDtoFromModel).collect(Collectors.toList());
 	}
 
