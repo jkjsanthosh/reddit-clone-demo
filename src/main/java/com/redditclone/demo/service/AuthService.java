@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.redditclone.demo.dto.AuthenticationResponse;
+import com.redditclone.demo.dto.RefreshTokenRequest;
 import com.redditclone.demo.dto.UserSignupRequestInfo;
 import com.redditclone.demo.exceptions.RedditException;
 import com.redditclone.demo.model.NotificationEmailInfo;
@@ -60,6 +63,13 @@ public class AuthService {
 
 	/** The jwt provider which provides token to authenticate. */
 	private final JwtProvider jwtProvider;
+
+	/**
+	 * The refresh token service which is used to generate refresh token after jwt
+	 * time is expired.
+	 */
+	private final RefreshTokenService refreshTokenService;
+
 	/** The Constant ACCOUNT_ACTIVATION_MAIL_NOTIFICATION_BODY. */
 	public static final String ACCOUNT_ACTIVATION_MAIL_NOTIFICATION_BODY = "\"Thank you for signing up to Reddit, \" +\r\n"
 			+ "                \"please click on the below url to activate your account : \" +\r\n"
@@ -171,18 +181,22 @@ public class AuthService {
 	/**
 	 * verifyLoginRequestAndGetAuthenticationInfo method verify the login request
 	 * and returns the authentication response if verification is success.
+	 * authentication response contains jwt and refresh token which will be used to
+	 * authenticate active logged in user account.
 	 *
 	 * @param username the user name of the user.
 	 * @param password the password of the user.
-	 * @return the authentication response information which will be used by client
-	 *         for upcoming api requests.
+	 * @return the authentication response information [jwt] which will be used by
+	 *         client for upcoming api requests.
 	 */
 	public AuthenticationResponse verifyLoginRequestAndGetAuthenticationInfo(String username, String password) {
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String authenticationToken = jwtProvider.generateToken(authentication);
-		return new AuthenticationResponse(username, authenticationToken);
+		String authenticationToken = jwtProvider.generateAuthenticationToken(authentication.getName());
+		return AuthenticationResponse.builder().username(username).authenticationToken(authenticationToken)
+				.refreshToken(refreshTokenService.generateAndSaveRefreshToken().getToken())
+				.expiryDateTime(Instant.now().plusMillis(jwtProvider.getJwtExpirationTimeInMillis())).build();
 	}
 
 	/**
@@ -190,9 +204,11 @@ public class AuthService {
 	 * the security context and the user table. throws UsernameNotFoundException if
 	 * related user information is not found.
 	 *
+	 * throws UsernameNotFoundException if related user information is not found.
+	 *
 	 * @return the current user who is logged in.
 	 * 
-	 * @throws UsernameNotFoundException if related user information is not found.
+	 *
 	 */
 	@Transactional(readOnly = true)
 	public User getCurrentLoggedInUser() {
@@ -200,5 +216,28 @@ public class AuthService {
 				.getContext().getAuthentication().getPrincipal();
 		return userRepository.findByUsername(principal.getUsername())
 				.orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+	}
+
+	/**
+	 * generateAndGetRefreshToken method generates new authentication token along
+	 * with a new refresh using previously generated refresh token to validate
+	 * authentication token after token is expired which is generated at initial
+	 * login.It will also used to generate and refresh token at regular interval in
+	 * order to avoid authentication token becoming invalid.
+	 *
+	 * @param refreshTokenRequest the refresh token request which contains refresh
+	 *                            token and username of the previous authentication
+	 *                            token information which will be used to generate
+	 *                            new refresh token.
+	 * 
+	 * @return the authentication response
+	 */
+	public AuthenticationResponse generateAndGetRefreshToken(@Valid RefreshTokenRequest refreshTokenRequest) {
+		refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+		String authenticationToken = jwtProvider.generateAuthenticationToken(refreshTokenRequest.getUsername());
+		return AuthenticationResponse.builder().authenticationToken(authenticationToken)
+				.refreshToken(refreshTokenRequest.getRefreshToken())
+				.expiryDateTime(Instant.now().plusMillis(jwtProvider.getJwtExpirationTimeInMillis()))
+				.username(refreshTokenRequest.getUsername()).build();
 	}
 }

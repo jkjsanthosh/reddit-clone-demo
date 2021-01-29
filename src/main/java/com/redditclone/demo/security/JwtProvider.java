@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.redditclone.demo.security;
 
 import java.io.IOException;
@@ -9,10 +12,12 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.time.Instant;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.redditclone.demo.exceptions.RedditException;
@@ -20,6 +25,7 @@ import com.redditclone.demo.exceptions.RedditException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
 
 /**
  * JwtProvider class provides methods to generate json web token which will be
@@ -34,8 +40,26 @@ public class JwtProvider {
 	 */
 	private KeyStore keyStore;
 
-	public String generateToken(Authentication authentication) {
-		return Jwts.builder().setSubject(authentication.getName())
+	/**
+	 * The jwt expiration time in millis which will be read from application.
+	 * properties file using given key mentioned in the @value annotation.
+	 */
+	@Value("${jwt.expiration.time}")
+	@Getter
+	private Long jwtExpirationTimeInMillis;
+
+	/**
+	 * generateAuthenticationToken method generates authentication token[jwt] with
+	 * expiration time as jwtExpirationTimeInMillis by encrypting with private
+	 * signature key using SHA256withRSA algorithm with user name as token subject
+	 *
+	 * @param username the username
+	 * @return the string the generated authentication token
+	 */
+	public String generateAuthenticationToken(String username) {
+		Instant currentInstantDateTime = Instant.now();
+		return Jwts.builder().setSubject(username).setIssuedAt(Date.from(currentInstantDateTime))
+				.setExpiration(Date.from(currentInstantDateTime.plusMillis(jwtExpirationTimeInMillis)))
 				.signWith(SignatureAlgorithm.RS256, getPrivateSignKey()).compact();
 	}
 
@@ -79,7 +103,6 @@ public class JwtProvider {
 	public Claims validateTokenAndGetJwsClaims(String jwtFroṁRequest) {
 		return Jwts.parser().setSigningKey(getPublicSignKey()).parseClaimsJws(jwtFroṁRequest).getBody();
 	}
-
 	/**
 	 * getPublicSignKey method gets and return the public sign key from java key
 	 * store instance's certificate.

@@ -1,6 +1,12 @@
+/*
+ * 
+ */
 package com.redditclone.demo.security;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import javax.servlet.FilterChain;
@@ -18,20 +24,38 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.redditclone.demo.constants.AuthEndPointConstants;
+
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 
 /**
  * JwtAuthenticationFilter is http authentication filter class which
  * authenticate and filters each and every http request api request with valid
- * jwt.
+ * jwt. It skips the authentication for login,signup,logout, refresh token and
+ * verification user account api request mappings.
  */
 @Component
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	/** The jwt provider which is used to validate jwt. */
+	/**
+	 * The jwt provider which is used to validate jwt to authentication user
+	 * account.
+	 */
 	private JwtProvider jwtProvider;
+
+	/**
+	 * The Constant ENTRY_POINT_PATHS_TO_SKIP_AUTHENTICATION which contains request
+	 * mapping paths login,signup,logout, refresh token and verification entry
+	 * points which will be skipped from authentication.
+	 */
+	private static final List<String> ENTRY_POINT_PATHS_TO_SKIP_AUTHENTICATION = Collections.unmodifiableList(Arrays
+			.asList(AuthEndPointConstants.AUTH_REQUEST_MAPPING + AuthEndPointConstants.SIGNUP_REQUEST_MAPPING_METHOD,
+					AuthEndPointConstants.AUTH_REQUEST_MAPPING + AuthEndPointConstants.LOGIN_REQUEST_MAPPING_METHOD,
+					AuthEndPointConstants.AUTH_REQUEST_MAPPING
+							+ AuthEndPointConstants.REFRESH_TOKEN_REQUEST_MAPPING_METHOD,
+					AuthEndPointConstants.AUTH_REQUEST_MAPPING + AuthEndPointConstants.lOG_OUT_REQUEST_MAPPING_METHOD));
 
 	/**
 	 * The user details service which is used to fetch user details and prepare
@@ -55,6 +79,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+		String currentRequestURI = request.getRequestURI();
+		return ENTRY_POINT_PATHS_TO_SKIP_AUTHENTICATION.contains(currentRequestURI)
+				|| currentRequestURI.contains(AuthEndPointConstants.AUTH_REQUEST_MAPPING
+						+ AuthEndPointConstants.VERIFY_NEW_ACCOUNT_REQUEST_MAPPING_METHOD);
+	}
+
 	/**
 	 * getJwtFroṁRequest method parses and returns jwt from the bearer token.
 	 *
@@ -67,6 +99,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return bearerToken.substring(7);
 		}
 		return bearerToken;
+
 	}
 
 }

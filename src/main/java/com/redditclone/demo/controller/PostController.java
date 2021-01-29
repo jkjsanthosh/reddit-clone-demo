@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
  * information based on different input attributes which is linked to post.
  */
 @RestController
-@RequestMapping("/api/posts/")
+@RequestMapping("/api/posts")
 @AllArgsConstructor
 public class PostController {
 

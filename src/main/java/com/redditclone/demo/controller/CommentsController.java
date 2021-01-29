@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
  * information based on different input attributes which is linked to comment.
  */
 @RestController
-@RequestMapping("/api/comments/")
+@RequestMapping("/api/comments")
 @AllArgsConstructor
 public class CommentsController {
 
