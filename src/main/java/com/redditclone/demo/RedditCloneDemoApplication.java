@@ -1,17 +1,23 @@
 package com.redditclone.demo;
 
-import java.time.Instant;
-import java.util.Optional;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+/**
+ * The Class RedditCloneDemoApplication.
+ */
 @SpringBootApplication
+@EnableAsync
 public class RedditCloneDemoApplication {
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
-		Optional.empty();
-		System.out.println(Instant.now());
 		SpringApplication.run(RedditCloneDemoApplication.class, args);
 	}
 

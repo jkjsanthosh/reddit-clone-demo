@@ -1,7 +1,6 @@
 package com.redditclone.demo.model;
 
 import java.time.Instant;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,12 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -31,7 +29,7 @@ import lombok.NoArgsConstructor;
  * @author Santhosh Kumar J
  * 
  *
- */ 
+ */
 public class Comment {
 
 	/**
@@ -43,9 +41,7 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	/**
-	 * 
-	 */
+	/** The commented text which contains content of the comment. */
 	@NotEmpty
 	private String commentedText;
 
@@ -54,17 +50,17 @@ public class Comment {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId", referencedColumnName = "postId")
-	private Post commentedPost;
-
-	/**
-	 * contains user commented date time information in UTC Time Zone/Format.
-	 */
-	private Instant commentedDateTime;
+	private Post post;
 
 	/**
 	 * the user information who commented on the post.
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", referencedColumnName = "userId")
-	private User commentedUser;
+	private User user;
+
+	/**
+	 * contains user commented date time information in UTC Time Zone/Format.
+	 */
+	private Instant commentedDateTime;
 }

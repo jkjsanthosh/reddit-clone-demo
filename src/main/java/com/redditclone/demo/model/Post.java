@@ -2,7 +2,6 @@ package com.redditclone.demo.model;
 
 import java.time.Instant;
 
-import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -70,24 +69,26 @@ public class Post {
 	/**
 	 * no of votes for this post.
 	 */
-	private Integer voteCount;
+	@Builder.Default
+	private Integer voteCount = 0;
 
 	/**
 	 * Contains post author's user information.
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", referencedColumnName = "userId")
-	private User postedUser;
+	private User user;
+
+	/**
+	 * related subreddit under which reddit post is created.
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "subredditId", referencedColumnName = "id")
+	private Subreddit relatedSubreddit;
 
 	/**
 	 * contains post created date time information in UTC Time Zone/Format.
 	 */
 	private Instant createdDateTime;
 
-	/**
-	 * related subreddit category under which reddit post is created.
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "subredditId", referencedColumnName = "id")
-	private Subreddit relatedSubredditCategory;
 }

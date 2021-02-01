@@ -7,10 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
-
-import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
  * Subreddit is entity class which contains information about
  * community/subreddit which will be used for categorizing or organizing the
  * posts. It contains information such as name,description,list of post
- * associated with it and created date time info.,
+ * associated with it and created date time info.
  * 
  * @author Santhosh Kumar J
  *
@@ -74,5 +74,7 @@ public class Subreddit {
 	/**
 	 * Contains post author's user information.
 	 */
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
+
 }
