@@ -16,12 +16,12 @@ import lombok.NoArgsConstructor;
  */
 public class UserSignupRequestInfo {
 	/**
-	 * the new registration email of the user.
+	 * the email of the user used for registration.
 	 */
 	private String email;
 
 	/**
-	 * the new user name of account of the user.
+	 * the user name of account of the user.
 	 */
 	private String username;
 

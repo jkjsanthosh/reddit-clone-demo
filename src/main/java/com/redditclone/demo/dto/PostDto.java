@@ -1,5 +1,7 @@
 package com.redditclone.demo.dto;
 
+import com.redditclone.demo.model.VoteType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,5 +43,8 @@ public class PostDto {
 
 	/** The duration of post how much has been passed after post is created. */
 	private String duration;
+
+	/** The latest vote type made by user. */
+	private VoteType latestVoteTypeMadeByUser;
 
 }

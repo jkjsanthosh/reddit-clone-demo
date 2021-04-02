@@ -29,8 +29,7 @@ public class AuthenticationResponse {
 	private String authenticationToken;;
 	/**
 	 * The refresh token which will be generated and used for authenticating
-	 * upcoming api requests after initial authentication token is expired or become
-	 * invalid.
+	 * upcoming api requests after initial authentication token is expired.
 	 */
 	private String refreshToken;
 
