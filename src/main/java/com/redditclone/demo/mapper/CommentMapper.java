@@ -4,6 +4,7 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.redditclone.demo.dto.CommentDto;
 import com.redditclone.demo.model.Comment;
 import com.redditclone.demo.model.Post;
@@ -26,6 +27,7 @@ public interface CommentMapper {
 	 */
 	@Mapping(target = "postId", source = "post.postId")
 	@Mapping(target = "commentedUserName", source = "user.username")
+	@Mapping(target = "duration", expression = "java(getDuration(comment))")
 	public CommentDto mapCommentDtoFromModel(Comment comment);
 
 	/**
@@ -44,5 +46,17 @@ public interface CommentMapper {
 	@Mapping(target = "post", source = "relatedPost")
 	@InheritInverseConfiguration
 	public Comment mapCommentModelFromDto(CommentDto commentDto, Post relatedPost, User commentedUser);
+
+	/**
+	 * getDuration method calculates the duration of the comment using TimeAgo kotin
+	 * library function and returns relative time ago text.
+	 *
+	 * @param comment the comment for which duration needs to be calculated.
+	 * @return the String which shows the relative time ago text. <br>
+	 *         example such as [4 days ago,21 hours ago,a minute ago,just now]
+	 */
+	default String getDuration(Comment comment) {
+		return TimeAgo.using(comment.getCommentedDateTime().toEpochMilli());
+	}
 
 }

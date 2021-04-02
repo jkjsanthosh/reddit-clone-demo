@@ -2,6 +2,7 @@ package com.redditclone.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.redditclone.demo.security.JwtAuthenticationFilter;
+import com.redditclone.demo.security.JwtProvider;
 
 import lombok.AllArgsConstructor;
 
@@ -48,14 +50,15 @@ public class HttpWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	public void configure(HttpSecurity httpSecurityConfig) throws Exception {
-		httpSecurityConfig.csrf().disable().authorizeRequests()
-//		.antMatchers("/api/auth/login", "/api/auth/signup").authenticated()
-				.antMatchers("/api/auth/**").permitAll().antMatchers("/api/subreddit/**").permitAll()
-				.antMatchers("/api/posts/**").permitAll().antMatchers("/api/comments/**").permitAll()
-				.antMatchers("/api/votes/**").permitAll().anyRequest().authenticated();
-//		httpSecurityConfig.authorizeRequests().
-//		.antMatchers("/api/auth/login","/api/auth/signup").
-		httpSecurityConfig.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		httpSecurityConfig.cors().and().csrf().disable()
+				.authorizeRequests()
+				.antMatchers("/api/auth/**").permitAll().antMatchers(HttpMethod.GET, "/api/subreddit/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+				.antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security",
+						"/swagger-ui.html", "/webjars/**")
+				.permitAll().anyRequest().authenticated();
+		httpSecurityConfig.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	/**

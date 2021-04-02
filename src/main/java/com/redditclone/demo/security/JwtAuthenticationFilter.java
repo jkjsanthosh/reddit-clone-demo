@@ -1,6 +1,3 @@
-/*
- * 
- */
 package com.redditclone.demo.security;
 
 import java.io.IOException;
@@ -15,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,19 +41,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	 * The jwt provider which is used to validate jwt to authentication user
 	 * account.
 	 */
-	private JwtProvider jwtProvider;
+	private final JwtProvider jwtProvider;
 
 	/**
-	 * The Constant ENTRY_POINT_PATHS_TO_SKIP_AUTHENTICATION which contains request
-	 * mapping paths login,signup,logout, refresh token and verification entry
-	 * points which will be skipped from authentication.
+	 * The Constant REQUEST_MAPPING_PATHS_TO_SKIP_AUTHENTICATION which contains
+	 * request mapping paths login,signup,logout, refresh token and verification
+	 * entry points which will be skipped from authentication.
 	 */
-	private static final List<String> ENTRY_POINT_PATHS_TO_SKIP_AUTHENTICATION = Collections.unmodifiableList(Arrays
+	private static final List<String> REQUEST_MAPPING_PATHS_TO_SKIP_AUTHENTICATION = Collections.unmodifiableList(Arrays
 			.asList(AuthEndPointConstants.AUTH_REQUEST_MAPPING + AuthEndPointConstants.SIGNUP_REQUEST_MAPPING_METHOD,
 					AuthEndPointConstants.AUTH_REQUEST_MAPPING + AuthEndPointConstants.LOGIN_REQUEST_MAPPING_METHOD,
 					AuthEndPointConstants.AUTH_REQUEST_MAPPING
 							+ AuthEndPointConstants.REFRESH_TOKEN_REQUEST_MAPPING_METHOD,
-					AuthEndPointConstants.AUTH_REQUEST_MAPPING + AuthEndPointConstants.lOG_OUT_REQUEST_MAPPING_METHOD));
+					AuthEndPointConstants.AUTH_REQUEST_MAPPING + AuthEndPointConstants.lOG_OUT_REQUEST_MAPPING_METHOD,
+					"/v2/api-docs", "/configuration/ui", "/swagger-ui.html"));
 
 	/**
 	 * The user details service which is used to fetch user details and prepare
@@ -82,9 +81,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 		String currentRequestURI = request.getRequestURI();
-		return ENTRY_POINT_PATHS_TO_SKIP_AUTHENTICATION.contains(currentRequestURI)
-				|| currentRequestURI.contains(AuthEndPointConstants.AUTH_REQUEST_MAPPING
+		List<String> allowedGetApiMethodList = Arrays.asList("/api/subreddit/", "/api/posts/", "/api/comments/");
+		boolean filterAndAllowGetApiMethods = request.getMethod().equals(HttpMethod.GET.name())
+				&& allowedGetApiMethodList.stream().filter(getApiMethod -> currentRequestURI.contains(getApiMethod))
+						.findFirst().isPresent();
+		boolean filterAndAllowSwaggerApiUrls = Arrays
+				.asList("/v2/api-docs", "/configuration/ui", "/configuration/security", "/swagger-ui.html")
+				.contains(currentRequestURI);
+		boolean allowedAuthApiUrls = REQUEST_MAPPING_PATHS_TO_SKIP_AUTHENTICATION.contains(currentRequestURI)
+		|| currentRequestURI.contains(AuthEndPointConstants.AUTH_REQUEST_MAPPING
 						+ AuthEndPointConstants.VERIFY_NEW_ACCOUNT_REQUEST_MAPPING_METHOD);
+		return filterAndAllowGetApiMethods || filterAndAllowSwaggerApiUrls || allowedAuthApiUrls;
 	}
 
 	/**

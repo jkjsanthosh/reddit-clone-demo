@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -239,5 +240,15 @@ public class AuthService {
 				.refreshToken(refreshTokenRequest.getRefreshToken())
 				.expiryDateTime(Instant.now().plusMillis(jwtProvider.getJwtExpirationTimeInMillis()))
 				.username(refreshTokenRequest.getUsername()).build();
+	}
+
+	/**
+	 * isLoggedIn method checks if the user is logged in.
+	 *
+	 * @return true, if is logged in, otherwise return false.
+	 */
+	public boolean isLoggedIn() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
 	}
 }

@@ -35,7 +35,7 @@ public class VoteController {
 	 *                            request which contains details to vote.
 	 * @return the response entity with http status ok.
 	 */
-	@PostMapping
+	@PostMapping("register")
 	public ResponseEntity<Void> registerVote(@RequestBody VoteDto voteRegisterRequest) {
 		voteService.registerVote(voteRegisterRequest);
 		return new ResponseEntity<>(HttpStatus.OK);

@@ -1,7 +1,5 @@
 package com.redditclone.demo.dto;
 
-import java.time.Instant;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,8 +28,7 @@ public class CommentDto {
 	private String commentedUserName;
 
 	/**
-	 * Th date time information on which comment is made by user in UTC Time
-	 * Zone/Format.
+	 * The duration of comment how much has been passed after comment is created.
 	 */
-	private Instant commentedDateTime;
+	private String duration;
 }

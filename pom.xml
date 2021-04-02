@@ -115,6 +115,19 @@
 			<artifactId>kotlin-test-junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- springfox swagger2 and ui dependency which will be used to generate 
+			document for rest api -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -154,8 +167,8 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<!-- kotlin maven compiler plugin for marlonlom annotation processing during 
-				compilation for calculating relative time -->
+			<!-- kotlin maven compiler plugin for marlonlom annotation processing 
+				during compilation for calculating relative time -->
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>

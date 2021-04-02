@@ -72,5 +72,4 @@ public class SubredditController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(subredditService.getAllSubreddits());
 	}
 
-
 }
