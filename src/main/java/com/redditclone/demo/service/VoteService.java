@@ -1,5 +1,7 @@
 package com.redditclone.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.redditclone.demo.dto.VoteDto;
@@ -8,6 +10,7 @@ import com.redditclone.demo.exceptions.RedditException;
 import com.redditclone.demo.mapper.VoteMapper;
 import com.redditclone.demo.model.Post;
 import com.redditclone.demo.model.User;
+import com.redditclone.demo.model.Vote;
 import com.redditclone.demo.repository.PostRepository;
 import com.redditclone.demo.repository.VoteRepository;
 
@@ -56,9 +59,9 @@ public class VoteService {
 		User currentLoggedInUser = authService.getCurrentLoggedInUser();
 		Post votedPost = postRepository.findById(voteRegisterRequest.getPostId())
 				.orElseThrow(() -> new PostNotFoundException(voteRegisterRequest.getPostId().toString()));
-		boolean isAlreadyVoted = voteRepository.findTopByPostAndVoteTypeAndUserOrderByVoteIdDesc(votedPost,
-				voteRegisterRequest.getVoteType(), currentLoggedInUser).isPresent();
-		if (isAlreadyVoted) {
+		Optional<Vote> recentVote = voteRepository.findTopByPostAndUserOrderByVoteIdDesc(votedPost,
+				currentLoggedInUser);
+		if (recentVote.isPresent() && voteRegisterRequest.getVoteType().equals(recentVote.get().getVoteType())) {
 			throw new RedditException("You have already " + voteRegisterRequest.getVoteType() + "D for this post ["
 					+ votedPost.getPostName() + "]");
 		}
